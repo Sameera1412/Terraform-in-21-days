@@ -1,0 +1,8 @@
+.terraform.lock.hcl
+.terraform/
+configurations...code-workspace
+main.tf.txt
+provider.tf.txt
+terraform.tfstate
+terraform.tfstate.backup
+terraform_1.4.6_windows_386/
