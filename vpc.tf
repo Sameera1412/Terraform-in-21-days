@@ -1,3 +1,4 @@
+
 locals {
   
   availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
@@ -32,6 +33,7 @@ resource "aws_subnet" "private" {
 
   tags = {
     Name = "${var.env_code}-private${count.index + 1}"
+
   }
 }
 
@@ -56,6 +58,7 @@ resource "aws_route_table" "public" {
   }
 }
 
+
 resource "aws_route_table_association" "public" {
   count          = length(var.public_cidr)
   subnet_id      = aws_subnet.public[count.index].id
@@ -72,18 +75,23 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "main" {
+
   count         = length(var.public_cidr)
+
   allocation_id = aws_eip.nat[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
+
     Name = "${var.env_code}-main${count.index + 1}"
+
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
   depends_on = [aws_internet_gateway.main]
 }
+
 
 resource "aws_route_table" "private" {
   count  = length(var.private_cidr)
@@ -104,3 +112,4 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
 }
+
