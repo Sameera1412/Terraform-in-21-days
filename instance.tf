@@ -3,7 +3,7 @@ resource "aws_instance" "public" {
   associate_public_ip_address = true
   instance_type               = "t3.micro"
   key_name                    = "Terraform_demo"
-  vpc_security_group_ids      = []
+  vpc_security_group_ids      = [aws_security_group.public.id]
   subnet_id                   = aws_subnet.public[0].id
 
   tags = {
