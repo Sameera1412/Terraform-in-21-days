@@ -1,17 +1,16 @@
 data "aws_ami" "amazonlinux" {
-  most_recent = true
+    most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-*"]
-  }
+    filter {
+        name = "name"
+        values = ["amzn2-ami-kernel-*"]
+    }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+    filter {
+        name = "virtualization-type"
+        values = ["hvm"]
+    }
 }
-
 
 
 resource "aws_instance" "public" {
@@ -40,6 +39,14 @@ resource "aws_security_group" "public" {
     cidr_blocks = ["142.188.74.67/32"]
   }
 
+  ingress {
+    description = "HTTP from public"
+    from_port   = 80
+    to_port     = 80 
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -54,11 +61,11 @@ resource "aws_security_group" "public" {
 }
 
 resource "aws_instance" "private" {
-  ami                    = data.aws_ami.amazonlinux.id
-  instance_type          = "t3.micro"
-  key_name               = "Terraform"
-  vpc_security_group_ids = [aws_security_group.private.id]
-  subnet_id              = aws_subnet.private[0].id
+  ami                         = data.aws_ami.amazonlinux.id
+  instance_type               = "t3.micro"
+  key_name                    = "Terraform"
+  vpc_security_group_ids      = [aws_security_group.private.id]
+  subnet_id                   = aws_subnet.private[0].id
 
   tags = {
     Name = "${var.env_code}-private"
