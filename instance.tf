@@ -2,7 +2,11 @@ resource "aws_instance" "public" {
   ami                         = "ami-08333bccc35d71140"
   associate_public_ip_address = true
   instance_type               = "t3.micro"
+<<<<<<< HEAD
   key_name                    = "Terraform"
+=======
+  key_name                    = "Terraform_demo"
+>>>>>>> bd0b6a15ad3614a9463a54811d573a95d6e01236
   vpc_security_group_ids      = [aws_security_group.public.id]
   subnet_id                   = aws_subnet.public[0].id
 
@@ -36,6 +40,7 @@ resource "aws_security_group" "public" {
 
   }
 }
+<<<<<<< HEAD
 
 resource "aws_instance" "private" {
   ami                         = "ami-08333bccc35d71140"
@@ -74,3 +79,5 @@ resource "aws_security_group" "private" {
 
   }
 }
+=======
+>>>>>>> bd0b6a15ad3614a9463a54811d573a95d6e01236

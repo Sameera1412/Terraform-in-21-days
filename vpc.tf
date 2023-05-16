@@ -1,6 +1,6 @@
 
 locals {
-  
+
   availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
 }
 
@@ -76,7 +76,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "main" {
 
-  count         = length(var.public_cidr)
+  count = length(var.public_cidr)
 
   allocation_id = aws_eip.nat[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
