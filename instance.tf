@@ -12,6 +12,7 @@ data "aws_ami" "amazonlinux" {
     }
 }
 
+
 resource "aws_instance" "public" {
   ami                         = data.aws_ami.amazonlinux.id
   associate_public_ip_address = true
@@ -30,7 +31,7 @@ resource "aws_instance" "public" {
 resource "aws_security_group" "public" {
   name        = "${var.env_code}-public"
   description = "Allow inbound traffic"
-  vpc_id        = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "SSH from public"
@@ -76,7 +77,7 @@ resource "aws_instance" "private" {
 resource "aws_security_group" "private" {
   name        = "${var.env_code}-private"
   description = "Allow VPC traffic"
-  vpc_id        = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "SSH from VPC"
