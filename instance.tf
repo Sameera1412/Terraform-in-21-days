@@ -1,12 +1,22 @@
+data "aws_ami" "amazonlinux" {
+    most_recent = true
+
+    filter {
+        name = "name"
+        values = ["amzn2-ami-kernel-*"]
+    }
+
+    filter {
+        name = "virtualization-type"
+        values = ["hvm"]
+    }
+}
+
 resource "aws_instance" "public" {
-  ami                         = "ami-08333bccc35d71140"
+  ami                         = data.aws_ami.amazonlinux.id
   associate_public_ip_address = true
   instance_type               = "t3.micro"
-<<<<<<< HEAD
   key_name                    = "Terraform"
-=======
-  key_name                    = "Terraform_demo"
->>>>>>> bd0b6a15ad3614a9463a54811d573a95d6e01236
   vpc_security_group_ids      = [aws_security_group.public.id]
   subnet_id                   = aws_subnet.public[0].id
 
@@ -28,6 +38,14 @@ resource "aws_security_group" "public" {
     cidr_blocks = ["142.188.74.67/32"]
   }
 
+  ingress {
+    description = "HTTP from public"
+    from_port   = 80
+    to_port     = 80 
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -40,10 +58,9 @@ resource "aws_security_group" "public" {
 
   }
 }
-<<<<<<< HEAD
 
 resource "aws_instance" "private" {
-  ami                         = "ami-08333bccc35d71140"
+  ami                         = data.aws_ami.amazonlinux.id
   instance_type               = "t3.micro"
   key_name                    = "Terraform"
   vpc_security_group_ids      = [aws_security_group.private.id]
@@ -79,5 +96,5 @@ resource "aws_security_group" "private" {
 
   }
 }
-=======
->>>>>>> bd0b6a15ad3614a9463a54811d573a95d6e01236
+
+
