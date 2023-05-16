@@ -1,12 +1,24 @@
+data "aws_ami" "amazonlinux" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-kernel-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+
+
 resource "aws_instance" "public" {
-  ami                         = "ami-08333bccc35d71140"
+  ami                         = data.aws_ami.amazonlinux.id
   associate_public_ip_address = true
   instance_type               = "t3.micro"
-<<<<<<< HEAD
   key_name                    = "Terraform"
-=======
-  key_name                    = "Terraform_demo"
->>>>>>> bd0b6a15ad3614a9463a54811d573a95d6e01236
   vpc_security_group_ids      = [aws_security_group.public.id]
   subnet_id                   = aws_subnet.public[0].id
 
@@ -18,7 +30,7 @@ resource "aws_instance" "public" {
 resource "aws_security_group" "public" {
   name        = "${var.env_code}-public"
   description = "Allow inbound traffic"
-  vpc_id        = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "SSH from public"
@@ -40,14 +52,13 @@ resource "aws_security_group" "public" {
 
   }
 }
-<<<<<<< HEAD
 
 resource "aws_instance" "private" {
-  ami                         = "ami-08333bccc35d71140"
-  instance_type               = "t3.micro"
-  key_name                    = "Terraform"
-  vpc_security_group_ids      = [aws_security_group.private.id]
-  subnet_id                   = aws_subnet.private[0].id
+  ami                    = data.aws_ami.amazonlinux.id
+  instance_type          = "t3.micro"
+  key_name               = "Terraform"
+  vpc_security_group_ids = [aws_security_group.private.id]
+  subnet_id              = aws_subnet.private[0].id
 
   tags = {
     Name = "${var.env_code}-private"
@@ -57,7 +68,7 @@ resource "aws_instance" "private" {
 resource "aws_security_group" "private" {
   name        = "${var.env_code}-private"
   description = "Allow VPC traffic"
-  vpc_id        = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "SSH from VPC"
@@ -79,5 +90,5 @@ resource "aws_security_group" "private" {
 
   }
 }
-=======
->>>>>>> bd0b6a15ad3614a9463a54811d573a95d6e01236
+
+
