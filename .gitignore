@@ -6,3 +6,6 @@ provider.tf.txt
 terraform.tfstate
 terraform.tfstate.backup
 terraform_1.4.6_windows_386/
+vpc-day2.txt
+Backup/
+vpc_count.txt
